@@ -35,11 +35,18 @@ final class EntityClassGenerator
 
     public function generateEntityClass(ClassNameDetails $entityClassDetails, bool $apiResource, bool $withPasswordUpgrade = false, bool $generateRepositoryClass = true, bool $broadcast = false): string
     {
+	$namespace = $entityClassDetails->getFullName();
+    	$namespace = str_replace('\\Entity\\'.$entityClassDetails->getShortName(), '', $namespace);
+	$namespace .= '\\Repository\\';
+	$namespace = str_replace('App\\', '', $namespace);
+
         $repoClassDetails = $this->generator->createClassNameDetails(
-            $entityClassDetails->getRelativeName(),
-            'Repository\\',
+            $entityClassDetails->getShortName(),
+	    $namespace,
             'Repository'
         );
+
+
 
         $tableName = $this->doctrineHelper->getPotentialTableName($entityClassDetails->getFullName());
 
